@@ -4,6 +4,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.invoice_management_system.dto.RegistrationRequest;
 import com.invoice_management_system.model.User;
 import com.invoice_management_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +55,23 @@ public class UserService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
+    }
+    
+    public User registerUser(RegistrationRequest registrationRequest) {
+        if (userRepository.existsByUsername(registrationRequest.getUsername())) {
+            throw new RuntimeException("Username is already taken");
+        }
+        if (userRepository.existsByEmail(registrationRequest.getEmail())) {
+            throw new RuntimeException("Email is already in use");
+        }
+
+        User user = new User();
+        user.setUsername(registrationRequest.getUsername());
+        user.setEmail(registrationRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setEnabled(true);
+
+        return userRepository.save(user);
     }
 }
