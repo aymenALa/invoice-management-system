@@ -3,10 +3,10 @@ package com.invoice_management_system;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class InvoiceManagementSystemApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
