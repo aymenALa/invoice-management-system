@@ -12,4 +12,9 @@ public class TestController {
     public String hello() {
         return "Hello, World!";
     }
+
+    @GetMapping("/protected")
+    public String protectedEndpoint() {
+        return "This is a protected endpoint";
+    }
 }
