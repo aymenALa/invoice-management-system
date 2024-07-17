@@ -43,13 +43,9 @@ public class User {
     private Set<String> roles = new HashSet<>();
 
     // Constructors
-    public User() {}
-
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public User() {
         this.createdAt = LocalDateTime.now();
+        this.roles.add("ROLE_USER"); // Default role
     }
 
     // Getters and Setters
@@ -131,5 +127,26 @@ public class User {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    // You might want to add a convenience method to add a role
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
+
+    // toString method for debugging
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", enabled=" + enabled +
+                ", createdAt=" + createdAt +
+                ", lastLogin=" + lastLogin +
+                ", roles=" + roles +
+                '}';
     }
 }

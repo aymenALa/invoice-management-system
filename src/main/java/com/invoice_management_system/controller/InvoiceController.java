@@ -48,8 +48,7 @@ public class InvoiceController {
     @PutMapping("/{id}")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoice, Authentication authentication) {
         User user = userService.getUserFromAuthentication(authentication);
-        invoice.setId(id);
-        Invoice updatedInvoice = invoiceService.updateInvoice(invoice, user);
+        Invoice updatedInvoice = invoiceService.updateInvoice(id, invoice, user);
         return ResponseEntity.ok(updatedInvoice);
     }
 

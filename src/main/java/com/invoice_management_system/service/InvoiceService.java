@@ -35,11 +35,21 @@ public class InvoiceService {
         return invoiceRepository.findByIdAndUser(id, user);
     }
 
-    public Invoice updateInvoice(Invoice invoice, User user) {
-        if (!invoiceRepository.existsByIdAndUser(invoice.getId(), user)) {
-            throw new RuntimeException("Invoice not found or does not belong to the user");
-        }
-        return invoiceRepository.save(invoice);
+    public Invoice updateInvoice(Long id, Invoice updatedInvoice, User user) {
+        Invoice existingInvoice = invoiceRepository.findByIdAndUser(id, user)
+            .orElseThrow(() -> new RuntimeException("Invoice not found or does not belong to the user"));
+        
+        // Update only the fields that should be updatable
+        existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
+        existingInvoice.setIssueDate(updatedInvoice.getIssueDate());
+        existingInvoice.setDueDate(updatedInvoice.getDueDate());
+        existingInvoice.setTotalAmount(updatedInvoice.getTotalAmount());
+        existingInvoice.setStatus(updatedInvoice.getStatus());
+        
+        // The user remains the same
+        // existingInvoice.setUser(user); -- This line is not needed as we're not changing the user
+
+        return invoiceRepository.save(existingInvoice);
     }
 
     public void deleteInvoice(Long id, User user) {
