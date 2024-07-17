@@ -2,11 +2,14 @@ package com.invoice_management_system.service;
 
 import com.invoice_management_system.model.User;
 import com.invoice_management_system.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -41,5 +44,17 @@ public class UserService implements UserDetailsService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    // New methods
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public User getUserFromAuthentication(Authentication authentication) {
+        String username = authentication.getName();
+        return findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
