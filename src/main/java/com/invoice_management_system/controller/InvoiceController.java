@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,18 +36,30 @@ public class InvoiceController {
         return ResponseEntity.ok(createdInvoice);
     }
 
+    
     @GetMapping
-    public ResponseEntity<Page<Invoice>> getAllInvoices(
+    public ResponseEntity<Page<Invoice>> getInvoices(
             Authentication authentication,
-            @RequestParam(required = false) List<Invoice.Status> statuses,
+            @RequestParam(required = false) String invoiceNumber,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) Double minAmount,
+            @RequestParam(required = false) Double maxAmount,
+            @RequestParam(required = false) Invoice.Status status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "issueDate") String sortBy) {
+            @RequestParam(defaultValue = "issueDate") String sortBy
+    ) {
         User user = userService.getUserFromAuthentication(authentication);
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<Invoice> invoices = invoiceService.getInvoicesForUser(user, statuses, pageRequest);
+
+        Page<Invoice> invoices = invoiceService.findInvoices(
+                user, invoiceNumber, startDate, endDate, minAmount, maxAmount, status, pageRequest
+        );
+
         return ResponseEntity.ok(invoices);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> getInvoice(@PathVariable Long id, Authentication authentication) {
