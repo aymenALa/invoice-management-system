@@ -4,6 +4,8 @@ import com.invoice_management_system.model.Invoice;
 import com.invoice_management_system.model.User;
 import com.invoice_management_system.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,11 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-    public List<Invoice> getInvoicesForUser(User user) {
-        return invoiceRepository.findByUser(user);
+    public Page<Invoice> getInvoicesForUser(User user, List<Invoice.Status> statuses, Pageable pageable) {
+        if (statuses == null || statuses.isEmpty()) {
+            return invoiceRepository.findByUser(user, pageable);
+        }
+        return invoiceRepository.findByUserAndStatusIn(user, statuses, pageable);
     }
 
     public Optional<Invoice> getInvoiceByIdForUser(Long id, User user) {
@@ -39,15 +44,11 @@ public class InvoiceService {
         Invoice existingInvoice = invoiceRepository.findByIdAndUser(id, user)
             .orElseThrow(() -> new RuntimeException("Invoice not found or does not belong to the user"));
         
-        // Update only the fields that should be updatable
         existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
         existingInvoice.setIssueDate(updatedInvoice.getIssueDate());
         existingInvoice.setDueDate(updatedInvoice.getDueDate());
         existingInvoice.setTotalAmount(updatedInvoice.getTotalAmount());
         existingInvoice.setStatus(updatedInvoice.getStatus());
-        
-        // The user remains the same
-        // existingInvoice.setUser(user); -- This line is not needed as we're not changing the user
 
         return invoiceRepository.save(existingInvoice);
     }

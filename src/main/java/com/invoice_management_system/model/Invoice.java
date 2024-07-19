@@ -119,4 +119,7 @@ public class Invoice {
                 ", status=" + status +
                 '}';
     }
+    public enum Status {
+        DRAFT, SENT, PAID, OVERDUE, CANCELLED
+    }
 }

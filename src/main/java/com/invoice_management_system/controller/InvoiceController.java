@@ -5,6 +5,9 @@ import com.invoice_management_system.model.User;
 import com.invoice_management_system.service.InvoiceService;
 import com.invoice_management_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +35,16 @@ public class InvoiceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Invoice>> getAllInvoices(Authentication authentication) {
+    public ResponseEntity<Page<Invoice>> getAllInvoices(
+            Authentication authentication,
+            @RequestParam(required = false) List<Invoice.Status> statuses,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "issueDate") String sortBy) {
         User user = userService.getUserFromAuthentication(authentication);
-        return ResponseEntity.ok(invoiceService.getInvoicesForUser(user));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Invoice> invoices = invoiceService.getInvoicesForUser(user, statuses, pageRequest);
+        return ResponseEntity.ok(invoices);
     }
 
     @GetMapping("/{id}")
