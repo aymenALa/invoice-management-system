@@ -4,6 +4,9 @@ import com.invoice_management_system.model.Invoice;
 import com.invoice_management_system.model.User;
 import com.invoice_management_system.service.InvoiceService;
 import com.invoice_management_system.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
+//import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -30,7 +33,7 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice, Authentication authentication) {
+    public ResponseEntity<Invoice> createInvoice(@Valid @RequestBody Invoice invoice, Authentication authentication) {
         User user = userService.getUserFromAuthentication(authentication);
         Invoice createdInvoice = invoiceService.createInvoice(invoice, user);
         return ResponseEntity.ok(createdInvoice);

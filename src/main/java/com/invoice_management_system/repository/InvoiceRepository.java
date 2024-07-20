@@ -18,4 +18,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpec
     boolean existsByInvoiceNumber(String invoiceNumber);
     Optional<Invoice> findByIdAndUser(Long id, User user);
     boolean existsByIdAndUser(Long id, User user);
+    List<Invoice> findTop5ByUserOrderByIssueDateDesc(User user);
+    List<Invoice> findAllByUser(User user);
+    List<Invoice> findByClientIdAndUser(Long clientId, User user);
 }
