@@ -106,4 +106,8 @@ public class InvoiceService {
                 pageable
         );
     }
+    
+    public List<Invoice> getInvoicesForClientAndUser(Long clientId, User user) {
+        return invoiceRepository.findByClientIdAndUser(clientId, user);
+    }
 }
