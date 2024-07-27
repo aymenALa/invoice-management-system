@@ -67,7 +67,7 @@ public class InvoiceService {
         existingInvoice.setDueDate(updatedInvoice.getDueDate());
         existingInvoice.setTotalAmount(updatedInvoice.getTotalAmount());
         existingInvoice.setStatus(updatedInvoice.getStatus());
-        
+        existingInvoice.setClient(updatedInvoice.getClient());        
         if (updatedInvoice.getClient() != null) {
             Client client = clientRepository.findById(updatedInvoice.getClient().getId())
                 .orElseThrow(() -> new BusinessException("Invalid client"));
@@ -99,10 +99,11 @@ public class InvoiceService {
             Double minAmount,
             Double maxAmount,
             Invoice.Status status,
+            Client client,
             Pageable pageable
     ) {
         return invoiceRepository.findAll(
-                InvoiceSpecification.findByFilters(user, invoiceNumber, startDate, endDate, minAmount, maxAmount, status),
+                InvoiceSpecification.findByFilters(user, invoiceNumber, startDate, endDate, minAmount, maxAmount, status, client),
                 pageable
         );
     }

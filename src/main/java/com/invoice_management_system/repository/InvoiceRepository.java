@@ -21,5 +21,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpec
     List<Invoice> findTop5ByUserOrderByIssueDateDesc(User user);
     List<Invoice> findAllByUser(User user);
     List<Invoice> findByClientIdAndUser(Long clientId, User user);
+//    List<Invoice> findByClientID(Long clientId);
     
 }

@@ -29,6 +29,22 @@ public class DashboardController {
     public ResponseEntity<Map<String, Object>> getDashboardData(Authentication authentication) {
         User user = userService.getUserFromAuthentication(authentication);
         Map<String, Object> dashboardData = dashboardService.getDashboardData(user);
+        
         return ResponseEntity.ok(dashboardData);
     }
 }
+//
+//
+//@GetMapping("/recent-invoices")
+//public ResponseEntity<List<Invoice>> getRecentInvoices(Authentication authentication) {
+//    User user = userService.getUserFromAuthentication(authentication);
+//    List<Invoice> recentInvoices = dashboardService.getRecentInvoices(user);
+//    return ResponseEntity.ok(recentInvoices);
+//}
+//
+//@GetMapping("/revenue")
+//public ResponseEntity<Map<String, Object>> getRevenueData(Authentication authentication) {
+//    User user = userService.getUserFromAuthentication(authentication);
+//    Map<String, Object> revenueData = dashboardService.getRevenueData(user);
+//    return ResponseEntity.ok(revenueData);
+//}

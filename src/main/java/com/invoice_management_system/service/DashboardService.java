@@ -51,4 +51,6 @@ public class DashboardService {
     private List<Invoice> getRecentInvoices(User user) {
         return invoiceRepository.findTop5ByUserOrderByIssueDateDesc(user);
     }
+    
+    
 }

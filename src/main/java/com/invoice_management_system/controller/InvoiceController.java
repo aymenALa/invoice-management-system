@@ -1,5 +1,6 @@
 package com.invoice_management_system.controller;
 
+import com.invoice_management_system.model.Client;
 import com.invoice_management_system.model.Invoice;
 import com.invoice_management_system.model.User;
 import com.invoice_management_system.service.InvoiceService;
@@ -51,6 +52,7 @@ public class InvoiceController {
             @RequestParam(required = false) Double minAmount,
             @RequestParam(required = false) Double maxAmount,
             @RequestParam(required = false) Invoice.Status status,
+            @RequestParam(required = false) Client  client,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "issueDate") String sortBy
@@ -58,7 +60,7 @@ public class InvoiceController {
         User user = userService.getUserFromAuthentication(authentication);
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
         Page<Invoice> invoices = invoiceService.findInvoices(
-                user, invoiceNumber, startDate, endDate, minAmount, maxAmount, status, pageRequest
+                user, invoiceNumber, startDate, endDate, minAmount, maxAmount, status, client, pageRequest
         );
         return ResponseEntity.ok(invoices);
     }

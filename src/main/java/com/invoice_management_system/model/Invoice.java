@@ -37,7 +37,7 @@ public class Invoice {
     @Column(nullable = false)
     private InvoiceStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     @JsonIgnoreProperties("invoices")
     private Client client;

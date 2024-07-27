@@ -1,5 +1,6 @@
 package com.invoice_management_system.specification;
 
+import com.invoice_management_system.model.Client;
 import com.invoice_management_system.model.Invoice;
 import com.invoice_management_system.model.User;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,7 +19,8 @@ public class InvoiceSpecification {
             LocalDate endDate,
             Double minAmount,
             Double maxAmount,
-            Invoice.Status status
+            Invoice.Status status,
+            Client client
     ) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -47,6 +49,10 @@ public class InvoiceSpecification {
 
             if (status != null) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            
+            if (client != null) {
+                predicates.add(criteriaBuilder.equal(root.get("client"), client));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
