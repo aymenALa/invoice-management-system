@@ -102,6 +102,19 @@ public class InvoiceController {
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
     
+    @GetMapping("/clients/{clientId}")
+    public ResponseEntity<List<Invoice>> getClientInvoices(@PathVariable Long clientId, Authentication authentication) {
+        User user = userService.getUserFromAuthentication(authentication);
+        List<Invoice> invoices = invoiceService.getInvoicesForClientAndUser(clientId, user);
+        
+        if (invoices.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(invoices);
+    }
+    
+    
     @GetMapping("/client/{clientId}/pdf")
     public ResponseEntity<byte[]> getClientInvoicesPdf(@PathVariable Long clientId, Authentication authentication) throws Exception {
         User user = userService.getUserFromAuthentication(authentication);
