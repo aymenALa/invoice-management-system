@@ -97,7 +97,7 @@ public class InvoiceController {
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("filename", "invoice-" + invoice.getInvoiceNumber() + ".pdf");
+        headers.setContentDispositionFormData("filename", "Invoice-" + invoice.getInvoiceNumber() + ".pdf");
         
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
@@ -128,7 +128,7 @@ public class InvoiceController {
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("filename", "client-invoices-" + clientId + ".pdf");
+        headers.setContentDispositionFormData("filename", "Client-invoices-" + clientId + ".pdf");
         
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
